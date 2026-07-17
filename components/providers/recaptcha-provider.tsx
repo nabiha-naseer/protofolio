@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 
 export default function RecaptchaProvider({
@@ -7,8 +8,16 @@ export default function RecaptchaProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const [mounted, setMounted] = useState(false);
 
-  console.log(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // If not mounted, just return children without the provider to keep server HTML clean
+  if (!mounted) {
+    return <>{children}</>;
+  }
 
   return (
     <GoogleReCaptchaProvider

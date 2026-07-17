@@ -1,13 +1,20 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 export function ThemeToggle() {
-  const { setTheme, resolvedTheme, theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const { setTheme, resolvedTheme } = useTheme();
 
-  // If theme is undefined, we are still hydrating; return a safe placeholder
-  if (!theme) {
+  // useEffect only runs on the client, so now we can safely show the UI
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Return a placeholder until the component is mounted on the client
+  if (!mounted) {
     return <div className="w-10 h-10" aria-hidden="true" />;
   }
 
